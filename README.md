@@ -27,14 +27,24 @@ syntax is as follows:
 ```
 
 This will create a `span` element with the class `span-format--class-name` and the text `Text`. You
-can then style this class in your CSS Snippets. For example, the following CSS Snippet will make the
-text red:
+can then style this class in your CSS Snippets. For very simple use cases, like changing the color,
+background color, or background opacity, there are three variables exposed:
+
+- `--span-format-color`: The color of the text.
+- `--span-format-color-opacity`: The opacity of the text.
+- `--span-format-background-color`: The background color of the text. This is computed automatically
+  based on the two variables above, but you can override it if you want.
+
+For example, the following CSS Snippet will make the text red with a slightly red background:
 
 ```css
 .span-format.span-format--class-name {
-    color: red;
+    --span-format-color: red;
 }
 ```
+
+However, you can style the text in any way you want. The variables are just a convenience for simple
+cases, but any valid CSS is allowed.
 
 > [!IMPORTANT]
 > It is **essential** that the changes you make to the text while in editing mode are purely
