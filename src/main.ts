@@ -10,26 +10,50 @@ export default class SpanFormatPlugin extends Plugin {
 			const paragraphs = element.findAll('p');
 
 			for (let p of paragraphs) {
-				const text = p.innerText.trim();
-
 				const spanFormatRegex = /\{\{\s*(.+?)\s*\|(.*?)\}\}/g;
 
-				let match;
-				while ((match = spanFormatRegex.exec(text)) !== null) {
-					console.log(`Tag: ${match[1]}, Value: ${match[2]}`);
+				const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT, null);
 
-					const startPos = match.index;
-					const endPos = startPos + match[0].length;
+				const toReplace = new Map<Node, RegExpMatchArray[]>();
 
-					const spanFormatEl = p.createSpan({
-						text: match[2],
-					});
-					spanFormatEl.addClasses(['span-format', 'span-format-display', `span-format--${match[1]}`]);
+				while (walker.nextNode()) {
+					const node = walker.currentNode;
+					const textContent = node.textContent;
+					if (!textContent) continue;
 
-					// Replace the matched text with the span element
-					const before = text.slice(0, startPos);
-					const after = text.slice(endPos);
-					p.innerHTML = `${before}${spanFormatEl.outerHTML}${after}`;
+					const matches = textContent.matchAll(spanFormatRegex);
+					toReplace.set(node, Array.from(matches));
+				}
+
+				for (let [node, matches] of toReplace) {
+					if (!node.textContent) continue;
+					const fragment = document.createDocumentFragment();
+					let text = node.textContent;
+
+					for (let match of matches) {
+						const [before, after] = text.split(match[0]);
+
+						console.log(`Match: ${match[0]}`);
+						console.log(`Text length: ${text.length}`);
+						console.log(`Before length: ${before.length}`);
+						console.log(`After length: ${after.length}`);
+
+						const spanFormatEl = p.createSpan({
+							text: match[2],
+						});
+						spanFormatEl.addClasses(['span-format', 'span-format-display', `span-format--${match[1]}`]);
+
+						fragment.appendChild(document.createTextNode(before));
+						fragment.appendChild(spanFormatEl);
+
+						text = after;
+					}
+
+					if (text) {
+						fragment.appendChild(document.createTextNode(text));
+					}
+
+					node.parentNode?.replaceChild(fragment, node);
 				}
 			}
 		});
