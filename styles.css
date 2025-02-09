@@ -1,0 +1,21 @@
+/*
+
+This CSS file will be included with your plugin, and
+available in the app when your plugin is enabled.
+
+If your plugin does not need CSS, delete this file.
+
+*/
+
+.span-format {
+    --span-format-color: var(--text-normal);
+    --span-format-color-opacity: 10%;
+    --span-format-background-color: color-mix(in lab, var(--span-format-color) var(--span-format-color-opacity), transparent);
+
+    color: var(--span-format-color);
+    background-color: var(--span-format-background-color);
+}
+
+.span-format .span-format-delimiter {
+    color: var(--span-format-background-color);
+}

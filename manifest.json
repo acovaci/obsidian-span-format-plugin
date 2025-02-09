@@ -1,0 +1,11 @@
+{
+	"id": "span-format",
+	"name": "Span-based Text Formatting",
+	"version": "0.0.1",
+	"minAppVersion": "0.15.0",
+	"description": "Demonstrates some of the capabilities of the Obsidian API.",
+	"author": "Adrian Covaci",
+	"authorUrl": "https://www.github.com/acovaci",
+	"fundingUrl": "https://www.github.com/acovaci",
+	"isDesktopOnly": false
+}
